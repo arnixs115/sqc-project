@@ -238,14 +238,14 @@ def read_product_info():
     # return jsonify({'result': 'success', 'msg': '성공적으로 상품를 가져왔습니다.', 'infos': product_infos})
 
     # 첫 번째 문서 가져오기
-    first_document = db.product.find_one({'name': name, 'tag': tag, 'brand': brand, 'sex': sex, 'size': size, 'price': {'$gte':minPrice},'price': {'$lte':maxPrice}}, {'_id': True}, sort=[('_id', 1)])
+    first_document = list(db.product.find({'name': name, 'tag': tag, 'brand': brand, 'sex': sex, 'size': size, 'price': {'$gte':minPrice},'price': {'$lte':maxPrice}}, {'_id': True}, sort=[('_id', 1)]))[0]
 
     # 마지막 문서 가져오기
-    last_document = db.product.find_one({'name': name, 'tag': tag, 'brand': brand, 'sex': sex, 'size': size, 'price': {'$gte':minPrice},'price': {'$lte':maxPrice}}, {'_id': True}, sort=[('_id', -1)])
+    last_document = list(db.product.find_one({'name': name, 'tag': tag, 'brand': brand, 'sex': sex, 'size': size, 'price': {'$gte':minPrice},'price': {'$lte':maxPrice}}, {'_id': True}, sort=[('_id', -1)]))[0]
 
     # 가져온 문서의 _id 값 추출
-    first_id = first_document['_id'] if first_document else None
-    last_id = last_document['_id'] if last_document else None
+    first_id = first_document
+    last_id = last_document
 
     # 결과 출력
     response = f"startId: {first_id}, endId: {last_id}"
@@ -258,12 +258,12 @@ def read_info():
     # mongodb에서 모든 데이터 조회
     # product_infos = list(db.product.find({}, {'_id': True}))
     # MongoDB에서 맨 처음과 맨 마지막 문서를 가져오는 쿼리 작성
-    first_document = db.product.find_one({}, {'_id': True}, sort=[('_id', 1)])
-    last_document = db.product.find_one({}, {'_id': True}, sort=[('_id', -1)])
+    first_document = list(db.product.find_one({}, {'_id': True}, sort=[('_id', 1)]))[0]
+    last_document = list(db.product.find_one({}, {'_id': True}, sort=[('_id', -1)]))[0]
 
     # 가져온 문서의 _id 값 추출
-    first_id = first_document['_id']
-    last_id = last_document['_id']
+    first_id = first_document
+    last_id = last_document
 
     response = f"startId: {first_id}, endId: {last_id}"
 
